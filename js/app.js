@@ -1262,38 +1262,53 @@ class App {
         const btnClose = document.getElementById('btnCloseQr');
         const qrContainer = document.getElementById('qrcodeContainer');
         const qrUrlLabel = document.getElementById('qrUrlLabel');
+        const defaultPublicUrl = 'https://vanemimal06-dev.github.io/MRU/';
 
-        if (qrUrlLabel) {
-            qrUrlLabel.textContent = window.location.href;
+        // Determinar URL real para el QR (si es local file:// o localhost, usamos la URL de GitHub Pages)
+        let targetUrl = defaultPublicUrl;
+        if (window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+            targetUrl = window.location.href;
         }
 
-        // Generar QR si la librería está disponible
-        if (window.QRCode && qrContainer) {
-            try {
-                new QRCode(qrContainer, {
-                    text: window.location.href,
-                    width: 180,
-                    height: 180,
-                    colorDark: "#070a12",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.M
-                });
-            } catch (e) {}
-        } else if (qrContainer) {
-            // Fallback SVG visual en caso de estar offline sin internet
-            qrContainer.innerHTML = `
-                <div style="padding: 10px; color: #070a12; font-size: 0.8rem; font-weight: bold; text-align: center;">
-                    📱 Simulador MRU
-                    <div style="font-size: 0.7rem; color: #64748b; margin-top: 5px; word-break: break-all;">
-                        ${window.location.href}
+        const renderQR = (url) => {
+            if (!qrContainer) return;
+            qrContainer.innerHTML = '';
+
+            if (qrUrlLabel) {
+                qrUrlLabel.textContent = url;
+            }
+
+            if (window.QRCode) {
+                try {
+                    new QRCode(qrContainer, {
+                        text: url,
+                        width: 180,
+                        height: 180,
+                        colorDark: "#070a12",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.M
+                    });
+                } catch (e) {
+                    console.error('Error generando QR:', e);
+                }
+            } else {
+                qrContainer.innerHTML = `
+                    <div style="padding: 10px; color: #070a12; font-size: 0.8rem; font-weight: bold; text-align: center;">
+                        📱 Simulador MRU
+                        <div style="font-size: 0.7rem; color: #64748b; margin-top: 5px; word-break: break-all;">
+                            ${url}
+                        </div>
                     </div>
-                </div>
-            `;
-        }
+                `;
+            }
+        };
+
+        renderQR(targetUrl);
 
         if (btnOpen && modal) {
             btnOpen.addEventListener('click', () => {
                 this.playTone(480, 'sine', 0.1);
+                renderQR(targetUrl);
                 modal.classList.add('active');
             });
         }
