@@ -18,36 +18,61 @@ export class ChallengeManager {
         this.levels = [
             {
                 id: 1,
-                name: 'Nivel 1: Entrega de Suministros',
-                description: 'Ajusta la velocidad adecuada para que el móvil se detenga dentro de la zona objetivo en exactamente el tiempo fijado.',
+                name: 'Nivel 1: Entrega de Suministros (Cálculo Directo de v)',
+                description: 'Un vehículo de transporte autónomo debe entregar suministros a una base en un tiempo estricto para no perder la ventana de acoplamiento.',
+                statement: 'El vehículo parte desde una posición inicial $x_0 = -20\\text{ m}$ y debe llegar con velocidad constante a la base ubicada en $x_f = 80\\text{ m}$ en exactamente $t = 5.0\\text{ s}$.',
+                question: '¿A qué velocidad ($v$) en m/s debe configurarse el motor del móvil?',
+                givenData: [
+                    { label: 'Posición inicial ($x_0$)', value: '-20 m', icon: '📍' },
+                    { label: 'Posición final ($x_f$)', value: '80 m', icon: '🎯' },
+                    { label: 'Tiempo fijado ($t$)', value: '5.0 s', icon: '⏱️' }
+                ],
                 x0: -20,
                 targetX: 80,
                 tolerance: 3.5,
                 targetTime: 5.0,
-                hintFormula: 'v = (x_final - x0) / t',
+                hintFormula: 'v = \\frac{x_f - x_0}{t} = \\frac{80 - (-20)}{5.0} = \\frac{100}{5.0}',
+                hintText: 'Aplica la fórmula de velocidad despejada: v = (x_f - x₀) / t. Recuerda la ley de signos: 80 - (-20) = 80 + 20 = 100.',
                 calculateIdeal: (x0, targetX, targetTime) => (targetX - x0) / targetTime
             },
             {
                 id: 2,
-                name: 'Nivel 2: Cruce de Barrera Láser',
-                description: 'Una barrera de seguridad se cerrará a los 6.0 segundos en la posición indicada. Calcula la velocidad mínima para cruzar la línea de meta a tiempo.',
+                name: 'Nivel 2: Cruce de Barrera Láser (Tiempo Límite)',
+                description: 'Un dron de rescate terrestre debe atravesar un túnel de seguridad antes de que se active un campo de fuerza láser.',
+                statement: 'El dron parte desde el origen $x_0 = 0\\text{ m}$. La compuerta láser está situada en $x = 120\\text{ m}$ y el temporizador la cerrará automáticamente a los $t = 6.0\\text{ s}$.',
+                question: '¿Cuál es la velocidad constante mínima ($v$) para cruzar la compuerta justo a tiempo?',
+                givenData: [
+                    { label: 'Posición inicial ($x_0$)', value: '0 m', icon: '📍' },
+                    { label: 'Posición de la barrera ($x_f$)', value: '120 m', icon: '🚧' },
+                    { label: 'Tiempo de cierre ($t$)', value: '6.0 s', icon: '⏳' }
+                ],
                 x0: 0,
                 targetX: 120,
                 tolerance: 4.0,
                 targetTime: 6.0,
-                hintFormula: 'v ≥ (x_barrera - x0) / t_cierre',
+                hintFormula: 'v = \\frac{x_f - x_0}{t} = \\frac{120 - 0}{6.0}',
+                hintText: 'Despeja la velocidad de la ecuación de posición del MRU: v = (x - x₀) / t.',
                 calculateIdeal: (x0, targetX, targetTime) => (targetX - x0) / targetTime
             },
             {
                 id: 3,
-                name: 'Nivel 3: Intercepción Espacial (2 Cuerpos)',
-                description: 'La sonda B viaja hacia nosotros desde 150m a -10 m/s. Ajusta la velocidad de la sonda A para que ambas colisionen/se encuentren exactamente en x = 90m.',
+                name: 'Nivel 3: Intercepción Espacial (Problema de 2 Cuerpos)',
+                description: 'Dos sondas espaciales se mueven en la misma línea de exploración y deben acoplarse exactamente en una estación de paso.',
+                statement: 'La sonda B viaja hacia nosotros desde $x_{0B} = 150\\text{ m}$ a una velocidad constante $v_B = -10\\text{ m/s}$. Nuestra sonda A parte del origen $x_{0A} = 0\\text{ m}$ en $t = 0\\text{ s}$. Ambas deben encontrarse exactamente en la estación en $x = 90\\text{ m}$.',
+                question: '¿Qué velocidad ($v_A$) debe tener la sonda A para llegar a $x = 90\\text{ m}$ al mismo tiempo que la sonda B?',
+                givenData: [
+                    { label: 'Sonda A (Origen $x_{0A}$)', value: '0 m', icon: '🚀' },
+                    { label: 'Sonda B (Origen $x_{0B}$)', value: '150 m', icon: '🛰️' },
+                    { label: 'Velocidad Sonda B ($v_B$)', value: '-10 m/s', icon: '⬅️' },
+                    { label: 'Punto de encuentro ($x$)', value: '90 m', icon: '📍' }
+                ],
                 x0_A: 0,
                 x0_B: 150,
                 v_B: -10,
                 meetingX: 90,
                 tolerance: 3.0,
-                hintFormula: 't_encuentro = (x_encuentro - x0_B) / v_B   ⇒   v_A = x_encuentro / t_encuentro',
+                hintFormula: 't = \\frac{90 - 150}{-10} = 6\\text{ s} \\quad \\Rightarrow \\quad v_A = \\frac{90}{6}',
+                hintText: 'Paso 1: Calcula el tiempo en que la sonda B llega a x = 90m con t = (90 - 150) / -10 = 6s. Paso 2: Calcula la velocidad de la sonda A con v_A = 90m / 6s.',
                 calculateIdeal: () => {
                     const tMeet = (90 - 150) / -10; // 6s
                     return 90 / tMeet; // 15 m/s

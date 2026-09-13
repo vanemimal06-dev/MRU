@@ -583,6 +583,115 @@ body {
     color: #e2e8f0;
 }
 
+/* Ejercicio y Enunciado Estructurado */
+.exercise-statement-box {
+    background: rgba(15, 23, 42, 0.7);
+    border-left: 4px solid var(--primary);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #f1f5f9;
+}
+
+.given-data-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.given-data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.data-pill {
+    background: #0d1322;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.data-pill-icon {
+    font-size: 1.25rem;
+}
+
+.data-pill-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.data-pill-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.data-pill-value {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.exercise-question-box {
+    background: rgba(0, 242, 254, 0.08);
+    border: 1px dashed rgba(0, 242, 254, 0.4);
+    border-radius: var(--radius-sm);
+    padding: 0.85rem 1.25rem;
+    margin-bottom: 1.25rem;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.btn-hint-toggle {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: #fbbf24;
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.btn-hint-toggle:hover {
+    background: rgba(251, 191, 36, 0.1);
+    border-color: #fbbf24;
+}
+
+.hint-box {
+    background: rgba(251, 191, 36, 0.08);
+    border-left: 3px solid #fbbf24;
+    padding: 0.8rem 1rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: #fef3c7;
+    line-height: 1.5;
+    animation: fadeIn 0.25s ease;
+}
+
 .challenge-inputs {
     display: flex;
     gap: 1rem;

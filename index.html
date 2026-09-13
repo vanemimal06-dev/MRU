@@ -258,23 +258,66 @@
 
                 <!-- Tarjeta del Desafío Activo -->
                 <div class="challenge-box">
-                    <h3 id="chLevelTitle" style="color: var(--primary); font-family: 'Outfit', sans-serif; margin-bottom: 0.5rem;">
-                        Nivel 1: Entrega de Suministros
-                    </h3>
-                    <p id="chLevelDesc" class="challenge-prompt">
-                        Ajusta la velocidad adecuada para que el móvil se detenga dentro de la zona objetivo en exactamente el tiempo fijado.
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <h3 id="chLevelTitle" style="color: var(--primary); font-family: 'Outfit', sans-serif; font-size: 1.3rem;">
+                            Nivel 1: Entrega de Suministros
+                        </h3>
+                        <span id="chBadgeLevel" style="background: rgba(0, 242, 254, 0.15); color: var(--primary); font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 999px; border: 1px solid var(--border-glow);">
+                            Ejercicio Guiado
+                        </span>
+                    </div>
+
+                    <p id="chLevelDesc" class="challenge-prompt" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                        Un vehículo de transporte autónomo debe entregar suministros a una base en un tiempo estricto.
                     </p>
 
+                    <!-- Enunciado del Ejercicio -->
+                    <div class="exercise-statement-box">
+                        <div style="font-weight: 700; color: var(--primary); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 0.3rem;">
+                            📖 Enunciado del Problema
+                        </div>
+                        <div id="chStatement">
+                            El vehículo parte desde una posición inicial x₀ = -20 m y debe llegar a la base ubicada en x = 80 m en exactamente t = 5.0 s.
+                        </div>
+                    </div>
+
+                    <!-- Datos Dados del Problema -->
+                    <div>
+                        <div class="given-data-title">📋 Datos Conocidos:</div>
+                        <div class="given-data-grid" id="chGivenData">
+                            <!-- Inyectado dinámicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Pregunta / Objetivo -->
+                    <div class="exercise-question-box">
+                        <span style="font-size: 1.2rem;">🎯</span>
+                        <div id="chQuestion">
+                            ¿A qué velocidad (v) en m/s debe configurarse el móvil para cumplir la meta?
+                        </div>
+                    </div>
+
+                    <!-- Botón de Pista / Fórmula -->
+                    <button class="btn-hint-toggle" id="btnToggleHint">
+                        <span>💡</span> Ver Pista / Fórmula de Ayuda
+                    </button>
+                    <div class="hint-box" id="chHintBox" style="display: none;">
+                        <div style="font-weight: 700; margin-bottom: 0.25rem;">Fórmula sugerida:</div>
+                        <div id="chHintFormula" style="font-family: 'Fira Code', monospace; margin-bottom: 0.25rem;"></div>
+                        <div id="chHintText" style="color: #fef08a;"></div>
+                    </div>
+
+                    <!-- Zona de Entrada de Respuesta -->
                     <div class="challenge-inputs">
-                        <label for="chInputVelocity" style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">
-                            Tu cálculo de Velocidad ($v$):
+                        <label for="chInputVelocity" style="font-size: 0.95rem; color: #fff; font-weight: 600;">
+                            ✍️ Tu respuesta de Velocidad ($v$):
                         </label>
-                        <input type="number" id="chInputVelocity" step="0.5" value="15" 
+                        <input type="number" id="chInputVelocity" step="0.5" value="20" 
                                style="background: #0f172a; border: 1px solid var(--border-color); color: var(--primary); font-family: 'Fira Code', monospace; font-size: 1.1rem; font-weight: 700; padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); width: 120px;">
                         <span style="color: var(--text-muted); font-weight: 600;">m/s</span>
 
                         <button class="btn-play" id="btnLaunchChallenge" style="margin-left: auto;">
-                            🚀 ¡Lanzar Prueba!
+                            🚀 ¡Probar Simulación!
                         </button>
                     </div>
 

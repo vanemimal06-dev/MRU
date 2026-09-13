@@ -1157,11 +1157,57 @@ class App {
 
     // ================= DESAFÍOS DEL STAND =================
     initChallenges() {
+        const title = document.getElementById('chLevelTitle');
+        const desc = document.getElementById('chLevelDesc');
+        const statement = document.getElementById('chStatement');
+        const givenData = document.getElementById('chGivenData');
+        const question = document.getElementById('chQuestion');
+        const hintFormula = document.getElementById('chHintFormula');
+        const hintText = document.getElementById('chHintText');
+        const btnToggleHint = document.getElementById('btnToggleHint');
+        const hintBox = document.getElementById('chHintBox');
+
+        if (btnToggleHint && hintBox) {
+            btnToggleHint.addEventListener('click', () => {
+                const isHidden = hintBox.style.display === 'none' || !hintBox.style.display;
+                hintBox.style.display = isHidden ? 'block' : 'none';
+                btnToggleHint.innerHTML = isHidden ? '<span>🙈</span> Ocultar Pista' : '<span>💡</span> Ver Pista / Fórmula de Ayuda';
+            });
+        }
+
         this.challenges = new ChallengeManager(this.challengePhysics, this.challengeRenderer, (state) => {
-            const title = document.getElementById('chLevelTitle');
-            const desc = document.getElementById('chLevelDesc');
-            if (title) title.textContent = state.config.name;
-            if (desc) desc.textContent = state.config.description;
+            const config = state.config;
+            if (!config) return;
+
+            if (title) title.textContent = config.name;
+            if (desc) desc.textContent = config.description;
+            if (statement) statement.innerHTML = config.statement.replace(/\$(.*?)\$/g, '<strong>$1</strong>');
+            if (question) question.innerHTML = config.question;
+
+            if (givenData && config.givenData) {
+                givenData.innerHTML = config.givenData.map(d => `
+                    <div class="data-pill">
+                        <span class="data-pill-icon">${d.icon || '📌'}</span>
+                        <div class="data-pill-info">
+                            <span class="data-pill-label">${d.label.replace(/\$(.*?)\$/g, '$1')}</span>
+                            <span class="data-pill-value">${d.value}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            if (hintFormula) hintFormula.textContent = config.hintFormula ? config.hintFormula.replace(/\\text\{m\/s\}/g, 'm/s').replace(/\\frac\{(.*?)\}\{(.*?)\}/g, '($1)/($2)').replace(/\\quad/g, ' ').replace(/\\Rightarrow/g, '➔') : '';
+            if (hintText) hintText.textContent = config.hintText || '';
+
+            // Reset hint box
+            if (hintBox) hintBox.style.display = 'none';
+            if (btnToggleHint) btnToggleHint.innerHTML = '<span>💡</span> Ver Pista / Fórmula de Ayuda';
+
+            // Reset input default
+            const inputField = document.getElementById('chInputVelocity');
+            if (inputField) {
+                inputField.value = config.id === 1 ? '20' : (config.id === 2 ? '20' : '15');
+            }
         });
 
         const levelBtns = document.querySelectorAll('.level-btn');
