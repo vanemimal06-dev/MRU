@@ -1379,33 +1379,67 @@ class App {
 
         renderQR(targetUrl);
 
-        if (btnOpen && modal) {
-            btnOpen.addEventListener('click', () => {
-                this.playTone(480, 'sine', 0.1);
-                renderQR(targetUrl);
+        window.openQrModal = () => {
+            this.playTone(480, 'sine', 0.1);
+            renderQR(targetUrl);
+            if (modal) {
                 modal.classList.add('active');
-            });
+                modal.style.display = 'flex';
+            }
+        };
+
+        window.closeQrModal = () => {
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            }
+        };
+
+        if (btnOpen) {
+            btnOpen.addEventListener('click', () => window.openQrModal());
         }
 
-        if (btnClose && modal) {
-            btnClose.addEventListener('click', () => {
-                modal.classList.remove('active');
-            });
+        if (btnClose) {
+            btnClose.addEventListener('click', () => window.closeQrModal());
         }
 
         if (modal) {
             modal.addEventListener('click', (e) => {
-                if (e.target === modal) modal.classList.remove('active');
+                if (e.target === modal) window.closeQrModal();
             });
         }
     }
 }
 
+// Funciones de respaldo global inmediatas
+window.openQrModal = function() {
+    const modal = document.getElementById('qrModal');
+    if (modal) {
+        modal.classList.add('active');
+        modal.style.display = 'flex';
+    }
+};
+window.closeQrModal = function() {
+    const modal = document.getElementById('qrModal');
+    if (modal) {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+    }
+};
+
 // Inicialización garantizada
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-        window.mruApp = new App();
+        try {
+            window.mruApp = new App();
+        } catch (e) {
+            console.error('Error inicializando MRU App:', e);
+        }
     });
 } else {
-    window.mruApp = new App();
+    try {
+        window.mruApp = new App();
+    } catch (e) {
+        console.error('Error inicializando MRU App:', e);
+    }
 }

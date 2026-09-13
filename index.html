@@ -40,7 +40,7 @@
 
             <!-- Acciones Rápidas -->
             <div class="header-actions">
-                <button class="btn-icon-action" id="btnOpenQr" title="Escanear en Celular">
+                <button class="btn-icon-action" id="btnOpenQr" onclick="window.openQrModal && window.openQrModal()" title="Escanear en Celular">
                     <span>📱</span> QR Móvil
                 </button>
             </div>
@@ -467,16 +467,21 @@ function lerp(start, end, t) {
     </main>
 
     <!-- Modal para Escanear Código QR en el Stand -->
-    <div class="modal-overlay" id="qrModal">
+    <div class="modal-overlay" id="qrModal" onclick="if(event.target===this) window.closeQrModal && window.closeQrModal()">
         <div class="modal-card">
-            <button class="btn-close-modal" id="btnCloseQr">✕</button>
+            <button class="btn-close-modal" id="btnCloseQr" onclick="window.closeQrModal && window.closeQrModal()">✕</button>
             <h3 style="color: var(--primary); font-family: 'Outfit', sans-serif; font-size: 1.3rem;">📱 Acceso Móvil al Simulador</h3>
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem;">
                 Escanea este código con la cámara de tu smartphone para abrir e interactuar con el simulador en vivo.
             </p>
             <div class="qr-code-box" id="qrcodeContainer"></div>
             <div style="font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); word-break: break-all;" id="qrUrlLabel">
-                http://localhost
+                https://vanemimal06-dev.github.io/MRU/
+            </div>
+            <div style="margin-top: 1rem;">
+                <a href="https://vanemimal06-dev.github.io/MRU/" target="_blank" style="color: var(--primary); font-size: 0.85rem; text-decoration: underline;">
+                    🔗 Abrir enlace directo
+                </a>
             </div>
         </div>
     </div>
@@ -487,6 +492,6 @@ function lerp(start, end, t) {
     </footer>
 
     <!-- Script Principal Autónomo (Funciona 100% con doble clic local) -->
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=2.0.2"></script>
 </body>
 </html>
