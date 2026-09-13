@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simulador Interactivo de Movimiento Rectilíneo Uniforme (MRU) - Proyecto LibroFest Física Básica y Computación">
+    <title>Simulador MRU | LibroFest Física & Computación</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Librería QR para generación autónoma en Stand -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+    <!-- Header Principal -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-group">
+                <div class="logo-badge">MRU</div>
+                <div class="logo-text">
+                    <h1>Simulador de Física Interactivo</h1>
+                    <p>Actividad LibroFest • Física Básica & Computación</p>
+                </div>
+            </div>
+
+            <!-- Pestañas de Navegación -->
+            <nav class="nav-tabs" role="tablist">
+                <button class="tab-btn active" data-tab="tab-simulador" id="nav-simulador">
+                    <span>🚀</span> Simulador
+                </button>
+                <button class="tab-btn" data-tab="tab-desafios" id="nav-desafios">
+                    <span>🎯</span> Desafíos Stand
+                </button>
+                <button class="tab-btn" data-tab="tab-teoria" id="nav-teoria">
+                    <span>📚</span> Fundamentación
+                </button>
+                <button class="tab-btn" data-tab="tab-computacion" id="nav-computacion">
+                    <span>💻</span> En Computación
+                </button>
+            </nav>
+
+            <!-- Acciones Rápidas -->
+            <div class="header-actions">
+                <button class="btn-icon-action" id="btnOpenQr" title="Escanear en Celular">
+                    <span>📱</span> QR Móvil
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+
+        <!-- ================= PESTAÑA 1: SIMULADOR ================= -->
+        <section id="tab-simulador" class="tab-panel active">
+            <div class="simulator-layout">
+                
+                <!-- Panel Lateral de Variables de Entrada -->
+                <aside class="glass-card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span>⚙️</span> Variables Físicas</h2>
+                        <button class="btn-secondary" id="btnResetValues" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">Reiniciar</button>
+                    </div>
+
+                    <!-- Variable 1: Posición Inicial (x0) -->
+                    <div class="control-group">
+                        <div class="control-label-row">
+                            <label for="sliderX0">Posición Inicial ($x_0$)</label>
+                            <span class="val-badge" id="badgeX0">0 m</span>
+                        </div>
+                        <input type="range" id="sliderX0" class="range-slider" min="-50" max="50" step="1" value="0">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-subtle); margin-top: 2px;">
+                            <span>-50 m</span>
+                            <span>0 m</span>
+                            <span>+50 m</span>
+                        </div>
+                    </div>
+
+                    <!-- Variable 2: Velocidad Constante (v) -->
+                    <div class="control-group">
+                        <div class="control-label-row">
+                            <label for="sliderV">Velocidad Constante ($v$)</label>
+                            <span class="val-badge" id="badgeV">10 m/s</span>
+                        </div>
+                        <input type="range" id="sliderV" class="range-slider" min="-25" max="25" step="0.5" value="10">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-subtle); margin-top: 2px;">
+                            <span>-25 m/s (←)</span>
+                            <span>0 m/s</span>
+                            <span>+25 m/s (→)</span>
+                        </div>
+                    </div>
+
+                    <!-- Variable 3: Tiempo Límite de Simulación (t) -->
+                    <div class="control-group">
+                        <div class="control-label-row">
+                            <label for="sliderMaxTime">Tiempo Total ($t_{\text{max}}$)</label>
+                            <span class="val-badge" id="badgeMaxTime">10 s</span>
+                        </div>
+                        <input type="range" id="sliderMaxTime" class="range-slider" min="3" max="20" step="1" value="10">
+                    </div>
+
+                    <!-- Selector de Móvil -->
+                    <div class="control-group">
+                        <div class="control-label-row">
+                            <label>Selección de Móvil</label>
+                        </div>
+                        <div class="vehicle-selector">
+                            <button class="vehicle-btn active" data-type="car">
+                                <span class="icon">🏎️</span>
+                                <span>Auto</span>
+                            </button>
+                            <button class="vehicle-btn" data-type="rover">
+                                <span class="icon">🛰️</span>
+                                <span>Rover</span>
+                            </button>
+                            <button class="vehicle-btn" data-type="drone">
+                                <span class="icon">🛸</span>
+                                <span>Dron</span>
+                            </button>
+                            <button class="vehicle-btn" data-type="particle">
+                                <span class="icon">⚛️</span>
+                                <span>Partícula</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Opciones de Visualización -->
+                    <div class="control-group" style="border-top: 1px solid var(--border-color); padding-top: 0.8rem; margin-top: 0.8rem;">
+                        <label style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-bottom: 0.4rem;">
+                            <input type="checkbox" id="chkShowVectors" checked> Mostrar Vector de Velocidad ($\vec{v}$)
+                        </label>
+                        <label style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="checkbox" id="chkShowStrobe" checked> Rastro Estroboscópico de Tiempo
+                        </label>
+                    </div>
+
+                    <button class="btn-secondary" id="btnExportCSV" style="width: 100%; margin-top: 0.5rem;">
+                        📥 Exportar Telemetría (.CSV)
+                    </button>
+                </aside>
+
+                <!-- Área Central de Simulación y Resultados -->
+                <div class="simulator-main">
+                    
+                    <!-- HUD de Resultados Físicos Calculados Automáticamente -->
+                    <div class="hud-metrics">
+                        <div class="metric-box">
+                            <div class="metric-label">Posición Actual $x(t)$</div>
+                            <div class="metric-val" id="hudPosX">0.00 <span class="metric-unit">m</span></div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-label">Desplazamiento $\Delta x$</div>
+                            <div class="metric-val" id="hudDisp">0.00 <span class="metric-unit">m</span></div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-label">Distancia Recorrida $d$</div>
+                            <div class="metric-val" id="hudDist">0.00 <span class="metric-unit">m</span></div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-label">Velocidad $v$</div>
+                            <div class="metric-val" id="hudVel">10.0 <span class="metric-unit">m/s</span></div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-label">Aceleración $a$ (MRU)</div>
+                            <div class="metric-val" style="color: var(--accent);">0.00 <span class="metric-unit">m/s²</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Canvas 2D de la Pista Graduada -->
+                    <div class="canvas-container">
+                        <canvas id="mruCanvas"></canvas>
+                    </div>
+
+                    <!-- Barra de Controles de Reproducción -->
+                    <div class="playback-bar">
+                        <div class="playback-buttons">
+                            <button class="btn-play" id="btnPlayPause">
+                                <span id="iconPlay">▶</span> <span id="lblPlay">Iniciar</span>
+                            </button>
+                            <button class="btn-secondary" id="btnStepBack" title="Paso Atrás 0.1s">⏮ -0.1s</button>
+                            <button class="btn-secondary" id="btnStepForward" title="Paso Adelante 0.1s">⏭ +0.1s</button>
+                            <button class="btn-secondary" id="btnResetSim" title="Reiniciar al inicio">🔄 Reiniciar</button>
+                        </div>
+
+                        <!-- Barra de Tiempo Interactivo -->
+                        <div class="timeline-slider-group">
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">t:</span>
+                            <input type="range" id="sliderTimeline" class="range-slider" min="0" max="10" step="0.05" value="0">
+                            <span class="time-display" id="hudTime">0.00 s</span>
+                        </div>
+                    </div>
+
+                    <!-- Gráficas Sincronizadas x(t) y v(t) -->
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <canvas id="chartPosCanvas" class="chart-canvas"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <canvas id="chartVelCanvas" class="chart-canvas"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Datos Discretos Segundo a Segundo -->
+                    <div class="glass-card" style="margin-top: 1rem;">
+                        <div class="card-header">
+                            <h3 class="card-title"><span>📊</span> Registro Numérico de Telemetría (Discreto $\Delta t = 1\text{ s}$)</h3>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table" id="telemetryTable">
+                                <thead>
+                                    <tr>
+                                        <th>Tiempo $t$ (s)</th>
+                                        <th>Posición $x(t)$ (m)</th>
+                                        <th>Velocidad $v$ (m/s)</th>
+                                        <th>Desplazamiento $\Delta x$ (m)</th>
+                                        <th>Distancia $d$ (m)</th>
+                                        <th>Aceleración $a$ (m/s²)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="telemetryBody">
+                                    <!-- Inyectado dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PESTAÑA 2: DESAFÍOS DEL STAND ================= -->
+        <section id="tab-desafios" class="tab-panel">
+            <div class="challenge-container">
+                
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.75rem; color: #fff; margin-bottom: 0.3rem;">
+                        🎯 Zona de Desafíos Físicos Interactivos
+                    </h2>
+                    <p style="color: var(--text-muted); font-size: 0.95rem;">
+                        Pon a prueba a los visitantes del stand aplicando las leyes del MRU para resolver misiones en tiempo real.
+                    </p>
+                </div>
+
+                <!-- Barra de Selección de Nivel -->
+                <div class="level-selector-bar">
+                    <button class="level-btn active" data-level="1">
+                        <h3>Nivel 1: Entrega Precisa</h3>
+                        <p style="font-size: 0.75rem; margin-top: 4px;">Detén el vehículo dentro de la zona objetivo calculando $v$.</p>
+                    </button>
+                    <button class="level-btn" data-level="2">
+                        <h3>Nivel 2: Cruce de Láser</h3>
+                        <p style="font-size: 0.75rem; margin-top: 4px;">Cruza la barrera antes del tiempo límite de cierre.</p>
+                    </button>
+                    <button class="level-btn" data-level="3">
+                        <h3>Nivel 3: Intercepción (2 Cuerpos)</h3>
+                        <p style="font-size: 0.75rem; margin-top: 4px;">Calcula la velocidad para interceptar la sonda espacial B.</p>
+                    </button>
+                </div>
+
+                <!-- Tarjeta del Desafío Activo -->
+                <div class="challenge-box">
+                    <h3 id="chLevelTitle" style="color: var(--primary); font-family: 'Outfit', sans-serif; margin-bottom: 0.5rem;">
+                        Nivel 1: Entrega de Suministros
+                    </h3>
+                    <p id="chLevelDesc" class="challenge-prompt">
+                        Ajusta la velocidad adecuada para que el móvil se detenga dentro de la zona objetivo en exactamente el tiempo fijado.
+                    </p>
+
+                    <div class="challenge-inputs">
+                        <label for="chInputVelocity" style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">
+                            Tu cálculo de Velocidad ($v$):
+                        </label>
+                        <input type="number" id="chInputVelocity" step="0.5" value="15" 
+                               style="background: #0f172a; border: 1px solid var(--border-color); color: var(--primary); font-family: 'Fira Code', monospace; font-size: 1.1rem; font-weight: 700; padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); width: 120px;">
+                        <span style="color: var(--text-muted); font-weight: 600;">m/s</span>
+
+                        <button class="btn-play" id="btnLaunchChallenge" style="margin-left: auto;">
+                            🚀 ¡Lanzar Prueba!
+                        </button>
+                    </div>
+
+                    <!-- Canvas del desafío -->
+                    <div class="canvas-container" style="height: 180px;">
+                        <canvas id="challengeCanvas" style="width: 100%; height: 180px;"></canvas>
+                    </div>
+
+                    <!-- Caja de Resultado / Retroalimentación -->
+                    <div id="chResultBox" class="challenge-result-box">
+                        <h4 id="chResultTitle" style="font-size: 1.1rem; margin-bottom: 0.4rem;"></h4>
+                        <p id="chResultMsg" style="font-size: 0.9rem; margin-bottom: 0.6rem;"></p>
+                        <div id="chSolutionDetails" class="code-snippet" style="white-space: pre-line;"></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= PESTAÑA 3: FUNDAMENTACIÓN FÍSICA ================= -->
+        <section id="tab-teoria" class="tab-panel">
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <div style="margin-bottom: 2rem; text-align: center;">
+                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; color: #fff;">Fundamentación Teórica del MRU</h2>
+                    <p style="color: var(--text-muted);">Principios físicos, ecuaciones cinemáticas y aplicaciones reales</p>
+                </div>
+
+                <div class="article-grid">
+                    <article class="article-card">
+                        <h2>1. ¿Qué es el MRU?</h2>
+                        <p>
+                            El <strong>Movimiento Rectilíneo Uniforme (MRU)</strong> es el tipo de movimiento más elemental en la cinemática. Se caracteriza porque un cuerpo se desplaza a lo largo de una <strong>línea recta</strong> manteniendo una <strong>velocidad constante ($\vec{v} = \text{constante}$)</strong> a lo largo del tiempo.
+                        </p>
+                        <p>
+                            Al no existir cambios ni en la magnitud (rapidez) ni en la dirección ni sentido del vector velocidad, la <strong>aceleración es estrictamente nula ($\vec{a} = 0\text{ m/s}^2$)</strong>.
+                        </p>
+                        <div class="formula-highlight">
+                            $\vec{a} = \frac{d\vec{v}}{dt} = \mathbf{0\text{ m/s}^2}$
+                        </div>
+                    </article>
+
+                    <article class="article-card">
+                        <h2>2. Ecuación de Posición Horaria</h2>
+                        <p>
+                            A partir de la definición de velocidad media $v = \frac{\Delta x}{\Delta t} = \frac{x(t) - x_0}{t - 0}$, al despejar la posición final $x(t)$ se obtiene la ecuación fundamental:
+                        </p>
+                        <div class="formula-highlight">
+                            $x(t) = x_0 + v \cdot t$
+                        </div>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; margin-left: 1.2rem; line-height: 1.7;">
+                            <li><strong>$x(t)$</strong>: Posición en el instante $t$ (metros, $\text{m}$).</li>
+                            <li><strong>$x_0$</strong>: Posición inicial en $t=0$ (metros, $\text{m}$).</li>
+                            <li><strong>$v$</strong>: Velocidad constante del móvil ($\text{m/s}$).</li>
+                            <li><strong>$t$</strong>: Tiempo transcurrido (segundos, $\text{s}$).</li>
+                        </ul>
+                    </article>
+
+                    <article class="article-card">
+                        <h2>3. Interpretación Geométrica de las Gráficas</h2>
+                        <p>
+                            <strong>Gráfica Posición vs Tiempo $x(t)$:</strong> Representa una función lineal $y = mx + b$. La <em>pendiente</em> ($m$) de la recta corresponde exactamente al valor de la velocidad:
+                        </p>
+                        <div class="formula-highlight">
+                            $\text{Pendiente } m = \frac{\Delta x}{\Delta t} = v$
+                        </div>
+                        <p>
+                            <strong>Gráfica Velocidad vs Tiempo $v(t)$:</strong> Es una línea recta horizontal. El <em>área geométrica</em> bajo el rectángulo representa el desplazamiento:
+                        </p>
+                        <div class="formula-highlight">
+                            $\text{Área} = \text{Base} \times \text{Altura} = t \times v = \Delta x$
+                        </div>
+                    </article>
+
+                    <article class="article-card">
+                        <h2>4. Aplicaciones en la Vida Cotidiana y Tecnología</h2>
+                        <p>
+                            Aunque en la Tierra la fricción y la gravedad perturban el movimiento ideal, el MRU es la base de múltiples sistemas:
+                        </p>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; margin-left: 1.2rem; line-height: 1.7;">
+                            <li><strong>Cintas transportadoras industriales:</strong> Mueven piezas o equipaje a velocidad constante.</li>
+                            <li><strong>Trenes Maglev en tramos rectos de crucero:</strong> Minimizan la fricción y mantienen $v = \text{cte}$.</li>
+                            <li><strong>Sondas Espaciales (Voyager 1 y 2):</strong> En el espacio exterior profundo, libre de fuerzas netas, viajan por inercia en MRU según la 1ª Ley de Newton.</li>
+                            <li><strong>Propagación de la luz en el vacío:</strong> Viaja en línea recta a $c \approx 300,000\text{ km/s}$.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PESTAÑA 4: RELACIÓN CON COMPUTACIÓN ================= -->
+        <section id="tab-computacion" class="tab-panel">
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <div style="margin-bottom: 2rem; text-align: center;">
+                    <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.8rem; color: #fff;">¿Cómo se Aplica el MRU en Computación?</h2>
+                    <p style="color: var(--text-muted);">Desde motores de videojuegos y renderizado hasta robótica autónoma</p>
+                </div>
+
+                <div class="article-grid">
+                    <article class="article-card">
+                        <h2>🎮 1. Motores de Videojuegos (Game Loops)</h2>
+                        <p>
+                            En motores como <strong>Unity, Unreal Engine y Godot</strong>, el bucle principal de juego actualiza los objetos cuadro a cuadro (*frame by frame*). Para mover un personaje u proyectil a velocidad constante sin que dependa de los FPS de la tarjeta gráfica, se usa la integración directa de Euler del MRU multiplicada por el <code>deltaTime</code>:
+                        </p>
+                        <div class="code-snippet">
+// Unity C# / Unreal C++
+void Update(float deltaTime) {
+    // x(t) = x0 + v * dt
+    position.x += velocity.x * deltaTime;
+}
+                        </div>
+                    </article>
+
+                    <article class="article-card">
+                        <h2>✨ 2. Interpolación Lineal (LERP) en Gráficos</h2>
+                        <p>
+                            En diseño de interfaces de usuario (UI), animaciones CSS y renderizado 3D por computadora, la función <code>lerp(a, b, t)</code> es una aplicación directa de la ecuación del MRU normalizada entre $[0, 1]$:
+                        </p>
+                        <div class="code-snippet">
+// Interpolación Lineal (Lerp)
+function lerp(start, end, t) {
+    // Equivalente a: x = x0 + (xf - x0) * t
+    return start + (end - start) * t;
+}
+                        </div>
+                    </article>
+
+                    <article class="article-card">
+                        <h2>🤖 3. Robótica y Navegación Odometría</h2>
+                        <p>
+                            En robots móviles autónomos (como aspiradoras inteligentes o Rovers espaciales), los <em>encoders ópticos</em> en las ruedas miden la velocidad de giro constante. El procesador estima la posición en el mapa integrando el MRU en pequeños intervalos de tiempo:
+                        </p>
+                        <div class="formula-highlight">
+                            $x_{k+1} = x_k + (v \cdot \cos\theta) \cdot \Delta t$
+                        </div>
+                    </article>
+
+                    <article class="article-card">
+                        <h2>🌐 4. Redes y Simulación de Latencia</h2>
+                        <p>
+                            En ciencias de la computación, el cálculo del tiempo de propagación de paquetes a través de fibra óptica ($t = \frac{d}{v_{\text{luz}}}$) es un cálculo puramente MRU para optimizar protocolos de enrutamiento y reducir el *ping* en servidores globales.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal para Escanear Código QR en el Stand -->
+    <div class="modal-overlay" id="qrModal">
+        <div class="modal-card">
+            <button class="btn-close-modal" id="btnCloseQr">✕</button>
+            <h3 style="color: var(--primary); font-family: 'Outfit', sans-serif; font-size: 1.3rem;">📱 Acceso Móvil al Simulador</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem;">
+                Escanea este código con la cámara de tu smartphone para abrir e interactuar con el simulador en vivo.
+            </p>
+            <div class="qr-code-box" id="qrcodeContainer"></div>
+            <div style="font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); word-break: break-all;" id="qrUrlLabel">
+                http://localhost
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>Proyecto de Física Básica • <strong>LibroFest 2026</strong> • Simulador de Movimiento Rectilíneo Uniforme (MRU)</p>
+    </footer>
+
+    <!-- Script Principal Autónomo (Funciona 100% con doble clic local) -->
+    <script src="js/app.js"></script>
+</body>
+</html>
