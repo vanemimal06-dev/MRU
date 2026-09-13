@@ -474,13 +474,15 @@ function lerp(start, end, t) {
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.4rem;">
                 Escanea este código con la cámara de tu smartphone para abrir e interactuar con el simulador en vivo.
             </p>
-            <div class="qr-code-box" id="qrcodeContainer"></div>
-            <div style="font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); word-break: break-all;" id="qrUrlLabel">
+            <div class="qr-code-box" id="qrcodeContainer">
+                <img id="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2Fvanemimal06-dev.github.io%2FMRU%2F" alt="QR Code MRU" style="display:block; width:180px; height:180px; border-radius: 4px; margin: 0 auto;" />
+            </div>
+            <div style="font-family: 'Fira Code', monospace; font-size: 0.8rem; color: #38ef7d; word-break: break-all; margin-top: 0.5rem;" id="qrUrlLabel">
                 https://vanemimal06-dev.github.io/MRU/
             </div>
             <div style="margin-top: 1rem;">
                 <a href="https://vanemimal06-dev.github.io/MRU/" target="_blank" style="color: var(--primary); font-size: 0.85rem; text-decoration: underline;">
-                    🔗 Abrir enlace directo
+                    🔗 Abrir enlace en pestaña nueva
                 </a>
             </div>
         </div>
@@ -491,7 +493,34 @@ function lerp(start, end, t) {
         <p>Proyecto de Física Básica • <strong>LibroFest 2026</strong> • Simulador de Movimiento Rectilíneo Uniforme (MRU)</p>
     </footer>
 
-    <!-- Script Principal Autónomo (Funciona 100% con doble clic local) -->
-    <script src="js/app.js?v=2.0.2"></script>
+    <!-- Script Inline Directo para Modal (100% Inmune a errores) -->
+    <script>
+        function openQrModal() {
+            var modal = document.getElementById('qrModal');
+            if (modal) {
+                modal.classList.add('active');
+                modal.style.display = 'flex';
+            }
+        }
+        function closeQrModal() {
+            var modal = document.getElementById('qrModal');
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            }
+        }
+        window.openQrModal = openQrModal;
+        window.closeQrModal = closeQrModal;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.getElementById('btnOpenQr');
+            if (btn) btn.onclick = openQrModal;
+            var closeBtn = document.getElementById('btnCloseQr');
+            if (closeBtn) closeBtn.onclick = closeQrModal;
+        });
+    </script>
+
+    <!-- Script Principal Autónomo -->
+    <script src="js/app.js?v=2.0.3"></script>
 </body>
 </html>
